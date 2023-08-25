@@ -1,0 +1,23 @@
+#!/bin/bash
+#BSUB -J epiDB-Null
+#BSUB -o test-%J.out
+#BSUB -e test-%J.err
+#BSUB -q bigmem
+#BSUB -n 1
+
+#Requirements:-
+#INSTALL 'seqtk' version 1
+#DOWNLOAD 'TE_neoantigens.tsv' and 'TE_chimeric_2297.tsv' from Shah et al. 2023 repository
+
+awk '(FNR!=1){print $5"\t"$6-1"\t"$7"\t"$1"\t1\t"$11}' TE_chimeric_2297.tsv|sort -Vk1,2 > TE_regions.bed
+awk '(NR==FNR){a[$1]=1;next}{if(a[$4]==1)print}' TE_neoantigens.tsv TE_regions.bed > TE_antigenRegions.bed
+seqtk subseq -s /data/hemberg/shared_resources/genomes/human/GRCh38.primary_assembly.genome.fa.gz TE_antigenRegions.bed > TE_seqs.fasta
+
+#add TE_id and strand to seqs
+awk '(FNR==NR){map[">"$5":"$6"-"$7]=$1"\t"$11;next}{if($0~/^>/){print $1"\t"map[$1]}else{print}}' TE_chimeric_2297.tsv TE_seqs.fasta > TE_seqs_named.fasta
+
+dustmasker -outfmt fasta -level 10 -in TE_seqs_named.fasta -out TE_seqs_named_masked.fasta
+
+awk '{if(NR==FNR){a[$1]=1;next}{if($0~/^>.*/){count=0;seqlen=length(seq)-15;for(x=1;x<=seqlen;x++){y=substr(seq,x,16);if(a[y]!=1){print y;count++}};seq=""; print count > "test"}else{seq=seq $1}}}END{count = 0;seqlen=length(seq)-15;for(x=1;x<=seqlen;x++){y=substr(seq,x,16);if(a[y]!=1){print y;count++}};print count > "test"}' ../Homo_sapiens_cds_16mers.tab TE_seqs_named_masked.fasta | grep -v 'a\|t\|g\|c' > TE_nullomers.tsv
+#revComp cds_nullomers to search on the 2nd read from RNAseq data
+awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' TE_nullomers.tsv > TE_nullomers_revComp.tsv
