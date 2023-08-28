@@ -30,7 +30,7 @@ END{for(x in trpep)print x"\t"substr(trpep[x],2)"\t"substr(trlen[x],2)"\t"substr
 TSNAdb_frequent_neoantigen_TCGA_4.0_adj.txt > TSNAdb_frequent_TCGA_per_ENST3.tab
 
 #--extract Human cds 16mers
-if [ ! -e "${n}.fusionJunction_Reads2.tab" ] || [ ! -s "${n}.fusionJunction_Reads2.tab" ] ; then
+if [ ! -e "Homo_sapiens_cds_16mers.tab" ] || [ ! -s "Homo_sapiens_cds_16mers.tab" ] ; then
   awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
 fi
 #--extract extract nullomers associated to neoepitopes in IEDB and TSNAdb
