@@ -9,6 +9,10 @@
 #INSTALL 'seqtk' version 1
 #DOWNLOAD 'TE_neoantigens.tsv' and 'TE_chimeric_2297.tsv' from Shah et al. 2023 repository
 
+if [ ! -e "Homo_sapiens_cds_16mers.tab" ] || [ ! -s "Homo_sapiens_cds_16mers.tab" ] ; then
+  awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
+fi
+
 awk '(FNR!=1){print $5"\t"$6-1"\t"$7"\t"$1"\t1\t"$11}' TE_chimeric_2297.tsv|sort -Vk1,2 > TE_regions.bed
 awk '(NR==FNR){a[$1]=1;next}{if(a[$4]==1)print}' TE_neoantigens.tsv TE_regions.bed > TE_antigenRegions.bed
 seqtk subseq -s /data/hemberg/shared_resources/genomes/human/GRCh38.primary_assembly.genome.fa.gz TE_antigenRegions.bed > TE_seqs.fasta
