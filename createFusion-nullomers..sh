@@ -15,10 +15,10 @@ cd /data/hemberg/nullomers/IEDB/epitope_DBs/fusion
 #9(17)-15(577) cds nullomers per junction
 #0(16)-15(157) genome nullomers per junction 2(28), 3(35)
 
-#create protein kmer to get the null peptides
-python3 ../createProteinKmers.py  ../../Homo_sapiens.GRCh38.pep.all.fa.gz > ../Homo_sapiens_protein_9mers.tab
-
-zcat /data/hemberg/shared_resources/genomes/human/hg19.fa.gz|awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' - > ../Homo_sapiens_genome_16mers.tab
+#create protein kmer to get the null peptides (not used)
+#python3 ../createProteinKmers.py  ../../Homo_sapiens.GRCh38.pep.all.fa.gz > ../Homo_sapiens_protein_9mers.tab
+#create genome nullomers from hg19 genome fasta (not used)
+#zcat /data/hemberg/shared_resources/genomes/human/hg19.fa.gz|awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' - > ../Homo_sapiens_genome_16mers.tab
 
 python3 extractChimerDbNullomers.py ChimerKB_n_Pub.tab /data/hemberg/shared_resources/genomes/human/hg19.fa.gz /data/hemberg/shared_resources/genomes/human/hg19.ensGene.gtf ChimerKB_n_Pub
 #Fusion junctions ouside CDS: 680
