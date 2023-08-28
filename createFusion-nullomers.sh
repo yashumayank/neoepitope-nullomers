@@ -9,8 +9,9 @@
 #conda activate scanpy
 cd /data/hemberg/nullomers/IEDB/epitope_DBs/fusion
 #--extract Human cds 16mers
-#awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
-
+if [ ! -e "Homo_sapiens_cds_16mers.tab" ] || [ ! -s "Homo_sapiens_cds_16mers.tab" ] ; then
+  awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
+fi
 #1342 have valid junctions out of 2243 fusions that are part of both ChimerKB & Pub
 #9(17)-15(577) cds nullomers per junction
 #0(16)-15(157) genome nullomers per junction 2(28), 3(35)
