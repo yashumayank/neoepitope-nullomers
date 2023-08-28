@@ -8,9 +8,31 @@
 eval "$(/PHShome/mm1169/miniconda3/bin/conda shell.bash hook)"
 conda activate scanpy
 cd /data/hemberg/nullomers/IEDB/epitope_DBs/
-#--extract Human cds 16mers
-#awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
+#Run R script to extract neoepitopes from the IEDB database
+Rscript extractIEDBneoepitopes.R
 
+#create maps from protein id (uniprot) to ENST id (ensembleUgencode)
+awk -F "\t" '{gene="";tran="";for(x=1;x<=NF;x++){if($x~/ENSG/){gene=$x}else if($x~/ENST/){tran=$x}}; print $1"\t"gene"\t"tran}' HUMAN_9606_idmapping_selected.tab > uniprot2ENSG_mapping.tab
+awk '{a[$2]=a[$2]"; "$1}END{for(x in a)print x"\t\t"substr(a[x],3)}' gencode.v40.metadata.TrEMBL gencode.v40.metadata.SwissProt > uniprot2gencode.tab
+#merge maps from protein id (uniprot) to ENST id (ensembleUgencode)
+awk -F "\t" '{split($2,genes,"; ");split($3,trans,"; ");for(i in genes)if(g[$1]!~genes[i])g[$1]=g[$1]";"genes[i];for(i in trans)if(t[$1]!~trans[i])t[$1]=t[$1]";"trans[i]}END{for(x in t){print x"\t"substr(g[x],2)"\t"substr(t[x],2)}}' ../epitope_DBs/uniprot2gencode_map.tab ../epitope_DBs/uniprot2ensembl_map.tab  > ../epitope_DBs/uniprot2gencodeUensembl_map.tab
+
+#convert IEDB neoepitopes to the format required for downstream analysis
+awk -F "\t" '(NR==FNR){g[$1]=$2;t[$1]=$3;next}{if(t[$6]!=""){split(g[$6],genes,";");\
+split(t[$6],trans,";");for(i in trans){split(trans[i],j,".");plen=length($1);\
+trpep[j[1]]=trpep[j[1]]";"$1;trlen[j[1]]=trlen[j[1]]";"plen;trWT[j[1]]=trWT[j[1]]";"$5}\
+}else{print $6 " not found ERROR." > "convertID.err"}}\
+END{for(x in trpep)print x"\t"substr(trpep[x],2)"\t"substr(trlen[x],2)"\t"substr(trWT[x],2)}' \
+uniprot2gencodeUensembl_map.tab IEDB_neoepitopes_sapien.tab > IEDB_neoepitopes_per_ENST2.tab
+#convert TSNAdb neoepitopes to the format required for downstream analysis
+awk '(FNR!=1 ){trpep[$4]=trpep[$4]";"$14;trlen[$4]=trlen[$4]";"length($14);trWT[$4]=trWT[$4]";"$10;}\
+END{for(x in trpep)print x"\t"substr(trpep[x],2)"\t"substr(trlen[x],2)"\t"substr(trWT[x],2)}' \
+TSNAdb_frequent_neoantigen_TCGA_4.0_adj.txt > TSNAdb_frequent_TCGA_per_ENST3.tab
+
+#--extract Human cds 16mers
+if [ ! -e "${n}.fusionJunction_Reads2.tab" ] || [ ! -s "${n}.fusionJunction_Reads2.tab" ] ; then
+  awk '{if($0~/^>.*/){ln=length(x);for(i=1;i+15<=ln;i++){a[substr(x,i,16)]=1};x=""}else{x=x $1}}END{for(j in a){print j}}' ../Homo_sapiens.GRCh38.cds.all.fa > Homo_sapiens_cds_16mers.tab
+fi
 #--extract extract nullomers associated to neoepitopes in IEDB and TSNAdb
 python IEDB_TSNAdb2nullomer.py TSNAdb_frequent_ICGC_per_ENST3.tab Homo_sapiens_cds_16mers.tab ../Homo_sapiens.GRCh38.cds.all.fa TSNAdb_ICGC
 python IEDB_TSNAdb2nullomer.py TSNAdb_frequent_TCGA_per_ENST3.tab Homo_sapiens_cds_16mers.tab ../Homo_sapiens.GRCh38.cds.all.fa TSNAdb_TCGA
