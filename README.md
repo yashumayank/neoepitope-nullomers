@@ -11,6 +11,7 @@ Workflow to produce nullomers corresponding to neoepitopes from various sources.
 - IEDB_epitope_full_v3.csv, IEDB_mhc_ligand_full.csv, IEDB_tcell_full_v3.csv, IEDB_bcell_full_v3.csv from IEDB database Downloads page
 - ChimerKB4.xlsx from ChimerDB. Keep rows with Pub==TRUE and export as a tsv file to ChimerKB_n_Pub.tab
 - TE_neoantigens.tsv and TE_chimeric_2297.tsv from Shah et al. 2023 repository
+- protein ID to transcript id mapiing files from uniprot and gencode HUMAN_9606_idmapping_selected.tab, gencode.v40.metadata.TrEMBL, gencode.v40.metadata.SwissProt
 
 ## Create the files required to run cfRNA-neoepitopes pipeline
  
