@@ -20,13 +20,6 @@
 
 '''
 
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.Seq import MutableSeq
-from Bio.SeqRecord import SeqRecord
-import sys, csv, re
-import gzip
-
 fusPep=set()
 pepKmer=set()
 nullPep_len = 9
@@ -75,18 +68,18 @@ for rec5, rec3 in zip(SeqIO.parse(sys.argv[3] + "_5primeJunction.fasta", "fasta"
                     neopepStr=neopepStr + ";" + str(fusion_pep[pstt:pstp])
     #nf.write("\t"+ str(rec5.description) +" <-> "+ str(rec3.description)+"\n")
 
-    junc_seq = rec5.seq[-flen:] + rec3.seq[:flen]
+    junc_seq = (rec5.seq[-flen:] + rec3.seq[:flen]).upper()
     for stt in range(flen):
         stp=stt+null_len
         if not(junc_seq[stt:stp] in fusPep):
              nf.write(str(junc_seq[stt:stp]) +";")
-    nf.write("\t" + juncFrame5 + neopepStr + "\t"+ str(rec5.description) +" <-> "+ str(rec3.description)+"\n")
+    nf.write("\t" + juncFrame5 + neopepStr + "\t"+ str(rec5.description) +"\t"+ str(rec3.description.split()[1])+"\n")
 
     null_record = SeqRecord(Seq(junc_seq), id=rec5.id,
-                       description = rec5.description + " <-> " + rec3.description)
+                       description = rec5.description + "\t" + rec3.description.split()[1])
     SeqIO.write(null_record, jf, "fasta")
     map_record = SeqRecord(Seq(rec5.seq + rec3.seq), id=rec5.id,
-                       description = rec5.description + " <-> " + rec3.description)
+                       description = rec5.description + "\t" + rec3.description.split()[1])
     SeqIO.write(map_record, mfasta, "fasta")
 
 nf.close()
