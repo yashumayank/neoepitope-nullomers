@@ -60,7 +60,7 @@ awk -F "\t" 'BEGIN{PROCINFO["sorted_in"] = "@ind_num_asc"}{if(NR==FNR){f[$1]=$2}
 #--merge the filtered nullomers associated to IEDB and TSNAdb neoepitopes
 awk -F "\t" '($1!="" || NF==4){split($1,u,";");for(i in u){a[u[i]]=1}}END{for(i in a)print i}' IEDB_neoepitopes-nullomersTop20.tsv TSNAdb_TCGA_neoepitopes-nullomersTop20.tsv TSNAdb_ICGC_neoepitopes-nullomersTop20.tsv > epitopeDB_nullomers.tsv
 #--revComp cds_nullomers to search on the read 2 of the RNAseq data
-awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' epitopeDB_nullomers.tsv > epitopeDB_nullomers_revComp.tsv
+awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' epitopeDB_nullomers.tsv > epitopeDB_nullomersRevComp.tsv
 
 sort TSNAdb_ICGC_neoepitopes-nullomersTop20.tsv|uniq >TSNAdb_ICGC_neoepitopes-nullomers.filtered.tsv
 sort TSNAdb_TCGA_neoepitopes-nullomersTop20.tsv|uniq >TSNAdb_TCGA_neoepitopes-nullomers.filtered.tsv
