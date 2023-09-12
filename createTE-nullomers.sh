@@ -24,4 +24,4 @@ dustmasker -outfmt fasta -level 10 -in TE_seqs_named.fasta -out TE_seqs_named_ma
 
 awk '{if(NR==FNR){a[$1]=1;next}{if($0~/^>.*/){count=0;seqlen=length(seq)-15;for(x=1;x<=seqlen;x++){y=substr(seq,x,16);if(a[y]!=1){print y;count++}};seq=""; print count > "test"}else{seq=seq $1}}}END{count = 0;seqlen=length(seq)-15;for(x=1;x<=seqlen;x++){y=substr(seq,x,16);if(a[y]!=1){print y;count++}};print count > "test"}' ../Homo_sapiens_cds_16mers.tab TE_seqs_named_masked.fasta | grep -v 'a\|t\|g\|c' > TE_nullomers.tsv
 #revComp cds_nullomers to search on the 2nd read from RNAseq data
-awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' TE_nullomers.tsv > TE_nullomers_revComp.tsv
+awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' TE_nullomers.tsv > TE_nullomersRevComp.tsv
