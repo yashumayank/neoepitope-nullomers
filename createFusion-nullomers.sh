@@ -38,4 +38,4 @@ awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--)
 
 module load Bowtie2
 export LD_LIBRARY_PATH=/apps/software-compiled/tbb/2018_U5-GCCcore-7.3.0/build/linux_intel64_gcc_cc7.3.0_libc2.12_kernel2.6.32_release/:$LD_LIBRARY_PATH
-bowtie2-build ChimerKB_n_Pub_for_mapping.fasta ChimerKB_bowtie
+bowtie2-build ChimerKB_n_Pub_for_mapping.fasta ChimerDB_bowtie
