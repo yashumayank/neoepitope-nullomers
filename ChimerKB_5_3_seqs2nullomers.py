@@ -10,14 +10,10 @@
 
 '''
 @author:     Mayank Mahajan
-
 @copyright:  2022 Brigham and women's hospital. All rights reserved.
-
 @license:    GPL3
-
 @contact:    yashumayank@gmail.com
 @deffield    updated: Updated
-
 '''
 
 fusPep=set()
