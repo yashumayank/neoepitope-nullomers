@@ -14,8 +14,8 @@ if [ ! -e "Homo_sapiens_cds_16mers.tab" ] || [ ! -s "Homo_sapiens_cds_16mers.tab
 fi
 
 awk '(FNR!=1){print $5"\t"$6-1"\t"$7"\t"$1"\t1\t"$11}' TE_chimeric_2297.tsv|sort -Vk1,2 > TE_regions.bed
-awk '(NR==FNR){a[$1]=1;next}{if(a[$4]==1)print}' TE_neoantigens.tsv TE_regions.bed > TE_antigenRegions.bed
-seqtk subseq -s /data/hemberg/shared_resources/genomes/human/GRCh38.primary_assembly.genome.fa.gz TE_antigenRegions.bed > TE_seqs.fasta
+awk '(NR==FNR){a[$1]=1;next}{OFS="\t";if(a[$4]!=1){$4=$4"x"}; print}' TE_neoantigens.tsv TE_regions.bed > TE_cancerRegions.bed
+seqtk subseq -s /data/hemberg/shared_resources/genomes/human/GRCh38.primary_assembly.genome.fa.gz TE_cancerRegions.bed > TE_seqs.fasta
 
 #add TE_id and strand to seqs
 awk '(FNR==NR){map[">"$5":"$6"-"$7]=$1"\t"$11;next}{if($0~/^>/){print $1"\t"map[$1]}else{print}}' TE_chimeric_2297.tsv TE_seqs.fasta > TE_seqs_named.fasta
