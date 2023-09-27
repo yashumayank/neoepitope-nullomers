@@ -12,7 +12,7 @@ cd /data/hemberg/nullomers/IEDB/epitope_DBs/
 Rscript extractIEDBneoepitopes.R
 
 #create maps from protein id (uniprot) to ENST id (ensembleUgencode)
-awk -F "\t" '{gene="";tran="";for(x=1;x<=NF;x++){if($x~/ENSG/){gene=$x}else if($x~/ENST/){tran=$x}}; print $1"\t"gene"\t"tran}' HUMAN_9606_idmapping_selected.tab > uniprot2ENSG_mapping.tab
+awk -F "\t" '{gene="";tran="";for(x=1;x<=NF;x++){if($x~/ENSG/){gene=$x}else if($x~/ENST/){tran=$x}}; print $1"\t"gene"\t"tran}' HUMAN_9606_idmapping_selected.tab > uniprot2ensembl_map.tab
 #awk '{a[$2]=a[$2]"; "$1}END{for(x in a)print x"\t\t"substr(a[x],3)}' gencode.v40.metadata.TrEMBL gencode.v40.metadata.SwissProt > uniprot2gencode.tab
 #merge maps from protein id (uniprot) to ENST id (ensembleUgencode)
 awk -F "\t" '{split($2,genes,"; ");split($3,trans,"; ");for(i in genes)if(g[$1]!~genes[i])g[$1]=g[$1]";"genes[i];for(i in trans)if(t[$1]!~trans[i])t[$1]=t[$1]";"trans[i]}END{for(x in t){print x"\t"substr(g[x],2)"\t"substr(t[x],2)}}'  uniprot2ensembl_map.tab  > uniprot2ensembl_map2.tab
