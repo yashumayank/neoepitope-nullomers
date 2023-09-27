@@ -15,7 +15,7 @@ Rscript extractIEDBneoepitopes.R
 awk -F "\t" '{gene="";tran="";for(x=1;x<=NF;x++){if($x~/ENSG/){gene=$x}else if($x~/ENST/){tran=$x}}; print $1"\t"gene"\t"tran}' HUMAN_9606_idmapping_selected.tab > uniprot2ENSG_mapping.tab
 #awk '{a[$2]=a[$2]"; "$1}END{for(x in a)print x"\t\t"substr(a[x],3)}' gencode.v40.metadata.TrEMBL gencode.v40.metadata.SwissProt > uniprot2gencode.tab
 #merge maps from protein id (uniprot) to ENST id (ensembleUgencode)
-awk -F "\t" '{split($2,genes,"; ");split($3,trans,"; ");for(i in genes)if(g[$1]!~genes[i])g[$1]=g[$1]";"genes[i];for(i in trans)if(t[$1]!~trans[i])t[$1]=t[$1]";"trans[i]}END{for(x in t){print x"\t"substr(g[x],2)"\t"substr(t[x],2)}}'  uniprot2ensembl_map.tab  > uniprot2gencodeUensembl_map.tab
+awk -F "\t" '{split($2,genes,"; ");split($3,trans,"; ");for(i in genes)if(g[$1]!~genes[i])g[$1]=g[$1]";"genes[i];for(i in trans)if(t[$1]!~trans[i])t[$1]=t[$1]";"trans[i]}END{for(x in t){print x"\t"substr(g[x],2)"\t"substr(t[x],2)}}'  uniprot2ensembl_map.tab  > uniprot2ensembl_map2.tab
 
 #convert IEDB neoepitopes to the format required for downstream analysis
 awk -F "\t" '(NR==FNR){g[$1]=$2;t[$1]=$3;next}{if(t[$6]!=""){split(g[$6],genes,";");\
@@ -23,7 +23,7 @@ split(t[$6],trans,";");for(i in trans){split(trans[i],j,".");plen=length($1);\
 trpep[j[1]]=trpep[j[1]]";"$1;trlen[j[1]]=trlen[j[1]]";"plen;trWT[j[1]]=trWT[j[1]]";"$5}\
 }else{print $6 " not found ERROR." > "convertID.err"}}\
 END{for(x in trpep)print x"\t"substr(trpep[x],2)"\t"substr(trlen[x],2)"\t"substr(trWT[x],2)}' \
-uniprot2ensembl_map.tab IEDB_neoepitopes_sapien.tab > IEDB_neoepitopes_per_ENST2.tab
+uniprot2ensembl_map2.tab IEDB_neoepitopes_sapien.tab > IEDB_neoepitopes_per_ENST2.tab
 #convert TSNAdb neoepitopes to the format required for downstream analysis
 awk '(FNR!=1 ){trpep[$4]=trpep[$4]";"$14;trlen[$4]=trlen[$4]";"length($14);trWT[$4]=trWT[$4]";"$10;}\
 END{for(x in trpep)print x"\t"substr(trpep[x],2)"\t"substr(trlen[x],2)"\t"substr(trWT[x],2)}' \
