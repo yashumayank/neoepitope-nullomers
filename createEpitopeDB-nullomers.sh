@@ -63,7 +63,7 @@ awk -F "\t" '{if(NR==FNR){f[$1]=$2}else{split($1,u,";");c=0;nlist="";olist="";fo
 awk -F "\t" '{if(NR==FNR){f[$1]=$2}else{split($1,u,";");c=0;nlist="";olist="";for(x=1;x<=length(u);x++){if(f[u[x]]<300){nlist=nlist";"u[x];c++};if(c>6){split(substr(nlist,2),v,";");olist=v[1]";"v[2]";"v[3]";"v[length(v)-2]";"v[length(v)-1]";"v[length(v)]}else{olist=substr(nlist,2)}};print olist"\t"$2"\t"$3"\t"$4"\t"$5}}' epitopeDB_nullomers_freq.tsv IEDB_neoepitopes-nullomers.tsv > IEDB_neoepitopes-nullomersEdge6.tsv
 
 #--merge the filtered nullomers associated to IEDB and TSNAdb neoepitopes
-awk -F "\t" '($1!="" || NF==4){split($1,u,";");for(i in u){a[u[i]]=1}}END{for(i in a)print i}' IEDB_neoepitopes-nullomersEdge6.tsv TSNAdb_TCGA_neoepitopes-nullomersEdge6.tsv TSNAdb_ICGC_neoepitopes-nullomersEdge6.tsv > epitopeDB_nullomers.tsv
+awk -F "\t" '($1!=""){split($1,u,";");for(i in u){a[u[i]]=1}}END{for(i in a)print i}' IEDB_neoepitopes-nullomersEdge6.tsv TSNAdb_TCGA_neoepitopes-nullomersEdge6.tsv TSNAdb_ICGC_neoepitopes-nullomersEdge6.tsv > epitopeDB_nullomers.tsv
 #--revComp cds_nullomers to search on the read 2 of the RNAseq data
 awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' epitopeDB_nullomers.tsv > epitopeDB_nullomersRevComp.tsv
 
