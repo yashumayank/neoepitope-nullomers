@@ -67,7 +67,7 @@ awk -F "\t" '($1!=""){split($1,u,";");for(i in u){a[u[i]]=1}}END{for(i in a)prin
 #--revComp cds_nullomers to search on the read 2 of the RNAseq data
 awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' epitopeDB_nullomers.tsv > epitopeDB_nullomersRevComp.tsv
 
-sort TSNAdb_ICGC_neoepitopes-nullomersTop20.tsv|uniq >TSNAdb_ICGC_neoepitopes-nullomers.filtered.tsv
-sort TSNAdb_TCGA_neoepitopes-nullomersTop20.tsv|uniq >TSNAdb_TCGA_neoepitopes-nullomers.filtered.tsv
-sort IEDB_neoepitopes-nullomersTop20.tsv|uniq > IEDB_neoepitopes-nullomers.filtered.tsv
+sort TSNAdb_ICGC_neoepitopes-nullomersEdge6.tsv|uniq >TSNAdb_ICGC_neoepitopes-nullomers.filtered.tsv
+sort TSNAdb_TCGA_neoepitopes-nullomersEdge6.tsv|uniq >TSNAdb_TCGA_neoepitopes-nullomers.filtered.tsv
+sort IEDB_neoepitopes-nullomersEdge6.tsv|uniq > IEDB_neoepitopes-nullomers.filtered.tsv
 
