@@ -33,16 +33,12 @@ awk '(NR==FNR){a[$1]=1;next}{if($1~/^>.*/){if(seqid!=""){for(i=1;i<=(length(seq)
 #---take 20 least frequent per neoepitope; filter out nullomers with genome-frequency > 100
 #awk -F "\t" 'BEGIN{ PROCINFO["sorted_in"] = "@ind_num_asc"}{if(NR==FNR){f[$1]=$2}else{split($1,u,";");delete(v);delete(vX);for(i=1;i<length(u);i++){v[i] = f[u[i]]};n = asorti(v,vX,"@val_num_asc");c=1;nlist="";for(x=1;x<=100;x++){while(v[vX[c]]<x && c<=n){nlist=nlist";"u[vX[c]];c++};if(c>20 || c>n){break}};print substr(nlist,2)"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}}' ChimerDB_nullomers_freq.tsv ChimerKB_n_Pub_junction_nullomers.tsv > ChimerDB-nullomersTop20.tsv
 #---take first 3 and last 3 nullomers with genome-frequency > 100
-awk -F "\t" '{if(NR==FNR){f[$1]=$2}else{split($1,u,";");c=0;nlist="";olist="";delete(v)\
-for(x in u){if(f[x]<300){nlist=nlist";"x;c++};if(c>6){\
-split(substr(nlist,2),u,";");olist=u[1]";"u[2]";"u[3]";"u[length(u)-2]";"u[length(u)-1]";"u[length(u)]";"\
-}else{olist=substr(nlist,2)}}}}' ChimerDB_nullomers_freq.tsv ChimerKB_n_Pub_junction_nullomers.tsv > ChimerDB-nullomersEdge6.tsv
-
+awk -F "\t" '{if(NR==FNR){f[$1]=$2}else{split($1,u,";");c=0;nlist="";olist="";for(x=1;x<length(u);x++){if(f[u[x]]<300){nlist=nlist";"u[x];c++};if(c>6){split(substr(nlist,2),v,";");olist=v[1]";"v[2]";"v[3]";"v[length(v)-2]";"v[length(v)-1]";"v[length(v)]";"}else{olist=substr(nlist,2)}};print olist"\t"$2"\t"$3"\t"$4"\t"$5"\t"$6}}' ChimerDB_nullomers_freq.tsv ChimerKB_n_Pub_junction_nullomers.tsv > ChimerDB-nullomersEdge6.tsv
 
 awk '{split($1,u,";");for(i=1;i<length(u);i++)print toupper(u[i])}' ChimerDB-nullomersEdge6.tsv > ChimerDB_nullomers.tsv
 #revComp transcriptome_nullomers to search on the read 2
 awk 'BEGIN{c["A"]="T";c["T"]="A";c["G"]="C";c["C"]="G";}{y="";for(j=16;j>=1;j--){y=y c[substr($1,j,1)]};print y;}' ChimerDB_nullomers.tsv > ChimerDB_nullomersRevComp.tsv
 
-module load Bowtie2
-export LD_LIBRARY_PATH=/apps/software-compiled/tbb/2018_U5-GCCcore-7.3.0/build/linux_intel64_gcc_cc7.3.0_libc2.12_kernel2.6.32_release/:$LD_LIBRARY_PATH
+module load bowtie2
+#export LD_LIBRARY_PATH=/apps/software-compiled/tbb/2018_U5-GCCcore-7.3.0/build/linux_intel64_gcc_cc7.3.0_libc2.12_kernel2.6.32_release/:$LD_LIBRARY_PATH
 bowtie2-build ChimerKB_n_Pub_for_mapping.fasta ChimerDB_bowtie
