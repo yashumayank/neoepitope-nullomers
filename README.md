@@ -11,13 +11,12 @@ Workflow to produce nullomers corresponding to neoepitopes from various sources.
 - epitope_full_v3.csv, mhc_ligand_full.csv, tcell_full_v3.csv, bcell_full_v3.csv from IEDB database (downloaded on Sept-19-2022)
 - ChimerKB4.xlsx from ChimerDB. Keep rows common with 'Pub' and export as a tsv file to ChimerKB_n_Pub.tab  (downloaded on May-19-2023)
 - Genome fasta and gtf file from hg19 (https://hgdownload.cse.ucsc.edu/goldenpath/hg19/bigZips/)
-- TE_neoantigens.tsv and TE_chimeric_2297.tsv from Shah et al. 2023 repository 
+- TE_neoantigens.tsv and TE_chimeric_2297.tsv from Shah et al. 2023 repository
 - protein ID to transcript id mapiing files from uniprot and gencode HUMAN_9606_idmapping_selected.tab, gencode.v40.metadata.TrEMBL, gencode.v40.metadata.SwissProt  (downloaded on June-27-2022)
 
-## Create the files required to run cfRNA-neoepitopes pipeline
+## Pipelines to create the files that map neoepitopes or gene fusions to their corresponding nullomers and metadata. The recent mapping files can be found in the FastNeo repository.
  
 ```
 createEpitopeDB-nullomers.sh
 createFusion-nullomers.sh
-createTE-nullomers.sh
 ```
