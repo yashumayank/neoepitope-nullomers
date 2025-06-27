@@ -14,7 +14,8 @@ Workflow to produce nullomers corresponding to neoepitopes from various sources.
 - TE_neoantigens.tsv and TE_chimeric_2297.tsv from Shah et al. 2023 repository
 - protein ID to transcript id mapiing files from uniprot and gencode HUMAN_9606_idmapping_selected.tab, gencode.v40.metadata.TrEMBL, gencode.v40.metadata.SwissProt  (downloaded on June-27-2022)
 
-## Pipelines to create the files that map neoepitopes or gene fusions to their corresponding nullomers and metadata. The recent mapping files can be found in the FastNeo repository.
+## Pipelines to create neoepitope associated nullomers 
+The following pipelines create nullomers associated to the known neoepitopes or gene fusions. Thus, a mapping file is created that also includes the differential HLA affinity of neoepitopes and their presence among the germline variants. The recent mapping files can be found in the FastNeo repository.
  
 ```
 createEpitopeDB-nullomers.sh
