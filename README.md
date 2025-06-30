@@ -15,7 +15,7 @@ Workflow to produce nullomers corresponding to neoepitopes from various sources.
 - protein ID to transcript id mapiing files from uniprot and gencode HUMAN_9606_idmapping_selected.tab, gencode.v40.metadata.TrEMBL, gencode.v40.metadata.SwissProt  (downloaded on June-27-2022)
 
 ## Pipelines to create neoepitope associated nullomers 
-The following pipelines create nullomers associated to the known neoepitopes or gene fusions. Thus, a mapping file is created that also includes the differential HLA affinity of neoepitopes and their presence among the germline variants. The recent mapping files can be found in the FastNeo repository.
+The following pipelines create nullomers associated to the known neoepitopes or gene fusions. A nullomer mapping file is created by each of the scripts. The neoepitope-nullomer mapping file also includes the differential HLA affinity of the neoepitopes and their presence among the germline variants. Recently created mapping files can be found in the FastNeo repository.
  
 ```
 createEpitopeDB-nullomers.sh
