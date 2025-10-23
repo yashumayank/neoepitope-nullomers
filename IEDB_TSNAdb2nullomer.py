@@ -60,8 +60,8 @@ def generator(protein):
         yield comb
 
 DELETION, INSERTION, MATCH = range(3)
-#maps neoepitopes to wild-type sequence and returns the indels and snvs (neoepitopes with <2 snvs and 0 indels are retained)
 
+#maps neoepitopes to wild-type sequence and returns the indels and snvs (neoepitopes with <2 snvs and 0 indels are retained)
 def smith_waterman(seq1, seq2, insertion_penalty = -1, deletion_penalty = -1,
                    mismatch_penalty = -1, match_score = 2):
     """
