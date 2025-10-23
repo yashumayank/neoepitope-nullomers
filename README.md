@@ -1,5 +1,5 @@
 # neoepitope-nullomers
-Workflow to extract known human neoepitopes from various sources and produce nullomers corresponding to those neoepitopes. These scripts also create the alignment file for gene-fusion reads and the nullomer to neoepitope map files used by the FastNeo (https://academic.oup.com/bioinformatics/article/41/5/btaf138/8124074)
+Workflow to extract known human neoepitopes from various sources and produce nullomers corresponding to those neoepitopes. For each known neoepitope, their affinity of common HLA alleles in estimated using netMHCpan and there prevelance in the healthy human germline is estimated using GnomAD database. These scripts also create the alignment files and the nullomer to neoepitope map files that are used by the FastNeo (https://academic.oup.com/bioinformatics/article/41/5/btaf138/8124074)
 
 ## Prerequisites
 - Python (Biopython, numpy)
