@@ -1,5 +1,5 @@
 # neoepitope-nullomers
-Workflow to produce nullomers corresponding to neoepitopes from various sources. These scripts also create the alignment file for gene-fusion reads and the nullomer to neoepitope map files
+Workflow to extract known human neoepitopes from various sources and produce nullomers corresponding to those neoepitopes. These scripts also create the alignment file for gene-fusion reads and the nullomer to neoepitope map files used by the FastNeo ([FastNeo paper](https://academic.oup.com/bioinformatics/article/41/5/btaf138/8124074))
 
 ## Prerequisites
 - Python (Biopython, numpy)
