@@ -28,6 +28,7 @@ import numpy
 import sys, csv, re
 import itertools
 
+#all possible nucleotide codons for each amino acid
 d = {
     'A': ['GCA', 'GCC', 'GCG', 'GCT'],
     'C': ['TGC', 'TGT'],
@@ -52,12 +53,15 @@ d = {
     '_': ['TAA', 'TAG', 'TGA'],
 }
 
+#returns all the possible combinations of codons at the mutated sites that produce the known neoepitope 
 def generator(protein):
     l = [d[aa] for aa in protein]
     for comb in itertools.product(*l):
         yield comb
 
 DELETION, INSERTION, MATCH = range(3)
+#maps neoepitopes to wild-type sequence and returns the indels and snvs (neoepitopes with <2 snvs and 0 indels are retained)
+
 def smith_waterman(seq1, seq2, insertion_penalty = -1, deletion_penalty = -1,
                    mismatch_penalty = -1, match_score = 2):
     """
